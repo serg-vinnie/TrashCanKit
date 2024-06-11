@@ -3,11 +3,44 @@ import RequestKit
 
 public typealias Response<S> = Result<S, Swift.Error>
 
+public func WTF(_ msg: String, code: Int = 0) -> Error {
+    NSError(code: code, message: msg)
+}
+
+internal extension NSError {
+    convenience init(code: Int, message: String) {
+        let userInfo: [String: String] = [NSLocalizedDescriptionKey:message]
+        self.init(domain: "FTW", code: code, userInfo: userInfo)
+    }
+}
+
+extension NSError {
+    static func notImplemented(_ msg: String) -> Error {
+        WTF("not implemented: " + msg)
+    }
+}
+
+struct UserJSON : Encodable, Decodable {
+    let uuid: String?
+    let username: String?
+    let display_name: String?
+}
+
 @objc open class User: NSObject {
     public let id: String
     open var login: String?
     open var name: String?
 
+    init(_ json: UserJSON) {
+        if let id = json.uuid {
+            self.id = id
+            login = json.username
+            name = json.display_name
+        } else {
+            id = "-1"
+        }
+    }
+    
     public init(_ json: [String: AnyObject]) {
         if let id = json["uuid"] as? String {
             self.id = id
@@ -19,12 +52,32 @@ public typealias Response<S> = Result<S, Swift.Error>
     }
 }
 
+struct EmailJSON : Encodable, Decodable {
+    let email: String?
+    let is_primary: Bool?
+    let is_confirmed: Bool?
+    let type: String?
+}
+
 @objc open class Email: NSObject {
     public let isPrimary: Bool
     public let isConfirmed: Bool
     open var type: String?
     open var email: String?
 
+    init(_ json: EmailJSON) {
+        if let _ = json.email {
+            isPrimary = json.is_primary ?? false
+            isConfirmed = json.is_confirmed ?? false
+            type = json.type
+            email = json.email
+        } else {
+            isPrimary = false
+            isConfirmed = false
+        }
+        super.init()
+    }
+    
     public init(json: [String: AnyObject]) {
         if let _ = json["email"] as? String {
             isPrimary = json["is_primary"] as? Bool ?? false
@@ -40,9 +93,9 @@ public typealias Response<S> = Result<S, Swift.Error>
 }
 
 public extension TrashCanKit {
-    public func me(_ session: RequestKitURLSession = URLSession.shared, completion: @escaping (_ response: Response<User>) -> Void) -> URLSessionDataTaskProtocol? {
+    func me(_ session: RequestKitURLSession = URLSession.shared, completion: @escaping (_ response: Response<User>) -> Void) -> URLSessionDataTaskProtocol? {
         let router = UserRouter.readAuthenticatedUser(configuration)
-        return router.loadJSON(session, expectedResultType: [String: Any].self) { json, error in
+        return router.load(expectedResultType: UserJSON.self) { json, error in
             if let error = error {
                 completion(Response.failure(error))
             } else {
@@ -54,18 +107,25 @@ public extension TrashCanKit {
         }
     }
 
-    public func emails(_ session: RequestKitURLSession = URLSession.shared, completion: @escaping (_ response: Response<[Email]>) -> Void) -> URLSessionDataTaskProtocol? {
+    func emails(_ session: RequestKitURLSession = URLSession.shared, completion: @escaping (_ response: Response<[Email]>) -> Void) -> URLSessionDataTaskProtocol? {
         let router = UserRouter.readEmails(configuration)
-        return router.loadJSON(session, expectedResultType: [String: AnyObject].self) { json, error in
+        return router.load(expectedResultType: EmailJSON.self) { json, error in
             if let error = error {
                 completion(Response.failure(error))
             } else {
-                if let json = json, let values = json["values"] as? [[String: AnyObject]] {
-                    let emails = values.map({ Email(json: $0) })
-                    completion(Response.success(emails))
-                }
+                completion(Response.failure(NSError.notImplemented("email")))
             }
         }
+//        return router.loadJSON(session, expectedResultType: [String: AnyObject].self) { json, error in
+//            if let error = error {
+//                completion(Response.failure(error))
+//            } else {
+//                if let json = json, let values = json["values"] as? [[String: AnyObject]] {
+//                    let emails = values.map({ Email(json: $0) })
+//                    completion(Response.success(emails))
+//                }
+//            }
+//        }
     }
 }
 

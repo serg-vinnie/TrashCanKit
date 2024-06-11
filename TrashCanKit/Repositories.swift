@@ -55,37 +55,37 @@ public enum PaginatedResponse<T> {
 }
 
 public extension TrashCanKit {
-    public func repositories(_ session: RequestKitURLSession = URLSession.shared, userName: String? = nil, nextParameters: [String: String] = [:], completion: @escaping (_ response: PaginatedResponse<[Repository]>) -> Void) -> URLSessionDataTaskProtocol? {
-        let router = RepositoryRouter.readRepositories(configuration, userName, nextParameters)
-        return router.loadJSON(session, expectedResultType: [String: AnyObject].self) { json, error in
-            if let error = error {
-                completion(PaginatedResponse.failure(error))
-            }
-
-            if let json = json, let values = json["values"] as? [[String: AnyObject]] {
-                let repos = values.map { Repository(json: $0) }
-                if let nextURL = json["next"] as? String, let parameterString = nextURL.components(separatedBy: "?").last {
-                    completion(PaginatedResponse.success(values: repos, nextParameters: parameterString.tkk_queryParameters))
-                } else {
-                    completion(PaginatedResponse.success(values: repos, nextParameters: [String: String]()))
-                }
-            }
-        }
-    }
-
-    public func repository(_ session: RequestKitURLSession = URLSession.shared, owner: String, name: String, completion: @escaping (_ response: Response<Repository>) -> Void) -> URLSessionDataTaskProtocol? {
-        let router = RepositoryRouter.readRepository(configuration, owner, name)
-        return router.loadJSON(session, expectedResultType: [String: AnyObject].self) { json, error in
-            if let error = error {
-                completion(Response.failure(error))
-            }
-
-            if let json = json {
-                let repo =  Repository(json: json)
-                completion(Response.success(repo))
-            }
-        }
-    }
+//    public func repositories(_ session: RequestKitURLSession = URLSession.shared, userName: String? = nil, nextParameters: [String: String] = [:], completion: @escaping (_ response: PaginatedResponse<[Repository]>) -> Void) -> URLSessionDataTaskProtocol? {
+//        let router = RepositoryRouter.readRepositories(configuration, userName, nextParameters)
+//        return router.loadJSON(session, expectedResultType: [String: AnyObject].self) { json, error in
+//            if let error = error {
+//                completion(PaginatedResponse.failure(error))
+//            }
+//
+//            if let json = json, let values = json["values"] as? [[String: AnyObject]] {
+//                let repos = values.map { Repository(json: $0) }
+//                if let nextURL = json["next"] as? String, let parameterString = nextURL.components(separatedBy: "?").last {
+//                    completion(PaginatedResponse.success(values: repos, nextParameters: parameterString.tkk_queryParameters))
+//                } else {
+//                    completion(PaginatedResponse.success(values: repos, nextParameters: [String: String]()))
+//                }
+//            }
+//        }
+//    }
+//
+//    public func repository(_ session: RequestKitURLSession = URLSession.shared, owner: String, name: String, completion: @escaping (_ response: Response<Repository>) -> Void) -> URLSessionDataTaskProtocol? {
+//        let router = RepositoryRouter.readRepository(configuration, owner, name)
+//        return router.loadJSON(session, expectedResultType: [String: AnyObject].self) { json, error in
+//            if let error = error {
+//                completion(Response.failure(error))
+//            }
+//
+//            if let json = json {
+//                let repo =  Repository(json: json)
+//                completion(Response.success(repo))
+//            }
+//        }
+//    }
 }
 
 // MARK: Router

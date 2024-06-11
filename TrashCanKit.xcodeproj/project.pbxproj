@@ -100,7 +100,6 @@
 		238EB2241C7C66CC00289C37 /* TrashCanKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 236364731BE22F1000AA7104 /* TrashCanKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		238EB2261C7C675A00289C37 /* RequestKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 238EB2251C7C675A00289C37 /* RequestKit.framework */; };
 		238EB2281C7C676900289C37 /* RequestKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 238EB2271C7C676900289C37 /* RequestKit.framework */; };
-		238EB22C1C7C678300289C37 /* RequestKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 238EB22B1C7C678300289C37 /* RequestKit.framework */; };
 		238EB2311C7C67E000289C37 /* RequestKit.framework in Carthage embed */ = {isa = PBXBuildFile; fileRef = 238EB2271C7C676900289C37 /* RequestKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		238EB2351C7C67FF00289C37 /* RequestKit.framework in Carthage embed */ = {isa = PBXBuildFile; fileRef = 238EB22B1C7C678300289C37 /* RequestKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		E65C23D12C1901F70094C1CA /* RequestKit in Frameworks */ = {isa = PBXBuildFile; productRef = E65C23D02C1901F70094C1CA /* RequestKit */; };
@@ -255,7 +254,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				238EB22C1C7C678300289C37 /* RequestKit.framework in Frameworks */,
 				E65C23D12C1901F70094C1CA /* RequestKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
