@@ -16,3 +16,4 @@ Licenses.plist
 fastlane/README.md
 fastlane/test-output
 fastlane/report.xml
+/TrashCanKit.xcodeproj/project.xcworkspace/xcshareddata/

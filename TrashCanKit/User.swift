@@ -1,8 +1,10 @@
 import Foundation
 import RequestKit
 
+public typealias Response<S> = Result<S, Swift.Error>
+
 @objc open class User: NSObject {
-    open let id: String
+    public let id: String
     open var login: String?
     open var name: String?
 
@@ -18,8 +20,8 @@ import RequestKit
 }
 
 @objc open class Email: NSObject {
-    open let isPrimary: Bool
-    open let isConfirmed: Bool
+    public let isPrimary: Bool
+    public let isConfirmed: Bool
     open var type: String?
     open var email: String?
 
@@ -40,7 +42,7 @@ import RequestKit
 public extension TrashCanKit {
     public func me(_ session: RequestKitURLSession = URLSession.shared, completion: @escaping (_ response: Response<User>) -> Void) -> URLSessionDataTaskProtocol? {
         let router = UserRouter.readAuthenticatedUser(configuration)
-        return router.loadJSON(session, expectedResultType: [String: AnyObject].self) { json, error in
+        return router.loadJSON(session, expectedResultType: [String: Any].self) { json, error in
             if let error = error {
                 completion(Response.failure(error))
             } else {

@@ -4,8 +4,8 @@ import RequestKit
 // MARK: model
 
 @objc open class Repository: NSObject {
-    open let id: String
-    open let owner: User
+    public let id: String
+    public let owner: User
     open var name: String?
     open var fullName: String?
     open var isPrivate: Bool
